@@ -5,6 +5,7 @@
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
@@ -51,15 +52,23 @@ AStellaMainCharacter::AStellaMainCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxCollision->SetupAttachment(RootComponent);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AStellaMainCharacter::BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Display, TEXT("BoxCollisionOnBeginOverlap"));
 }
 
 // Called when the game starts or when spawned
 void AStellaMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AStellaMainCharacter::BoxCollisionOnBeginOverlap);
 }
 
 // Called every frame
@@ -87,6 +96,10 @@ void AStellaMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::Look);
+
+		//Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::Interact);
+
 	}
 	else
 	{
@@ -153,4 +166,16 @@ void AStellaMainCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AStellaMainCharacter::Interact()
+{
+	UE_LOG(LogTemp, Log, TEXT("Interact"));
+	TArray<AActor*> OverlappingActors;
+	BoxCollision->GetOverlappingActors(OverlappingActors);
+
+	for (AActor* Actor : OverlappingActors)
+	{
+		UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
+	}
 }

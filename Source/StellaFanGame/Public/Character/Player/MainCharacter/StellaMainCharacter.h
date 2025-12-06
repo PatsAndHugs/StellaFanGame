@@ -6,8 +6,10 @@
 #include "GameFramework/Character.h"
 #include "StellaMainCharacter.generated.h"
 
+
 class USpringArmComponent;
 class UCameraComponent;
+class UBoxComponent;
 class UInputAction;
 struct FInputActionValue;
 
@@ -22,10 +24,13 @@ class AStellaMainCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* BoxCollision;
+	
 public:
 	// Sets default values for this character's properties
 	AStellaMainCharacter();
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +46,12 @@ protected:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* MouseLookAction;
+    
+    UPROPERTY(EditAnywhere,Category="Input")
+    UInputAction* InteractAction;
+    
+    UFUNCTION()
+    void BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 
 public:	
@@ -69,6 +80,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
+	
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void Interact();
 	
 public:
 	/** Returns CameraBoom subobject **/
