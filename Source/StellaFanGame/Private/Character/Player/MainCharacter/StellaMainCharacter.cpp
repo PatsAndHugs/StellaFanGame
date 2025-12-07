@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "StellaFanGame.h"
+#include "Interactions/Interfaces/PickupInterface.h"
 
 // Sets default values
 AStellaMainCharacter::AStellaMainCharacter()
@@ -176,6 +177,12 @@ void AStellaMainCharacter::Interact()
 
 	for (AActor* Actor : OverlappingActors)
 	{
-		UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
+		if (Actor->Tags.Contains("PickupTag"))
+		{
+			IPickupInterface* Pickup = Cast<IPickupInterface>(Actor);
+			if (Pickup != nullptr)
+				UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
+		}
+		
 	}
 }
