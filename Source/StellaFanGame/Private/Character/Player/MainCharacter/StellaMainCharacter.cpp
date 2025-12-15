@@ -181,7 +181,8 @@ void AStellaMainCharacter::Interact()
 		{
 			IPickupInterface* Pickup = Cast<IPickupInterface>(Actor);
 			if (Pickup != nullptr)
-				UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
+				Pickup->PickupItem();
+				//UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
 		}
 		
 	}
