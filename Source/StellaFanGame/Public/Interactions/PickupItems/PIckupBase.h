@@ -8,6 +8,7 @@
 #include "PIckupBase.generated.h"
 
 class USphereComponent;
+class AItemPool;
 
 UCLASS()
 class STELLAFANGAME_API APIckupBase : public AActor, public IPickupInterface
@@ -33,5 +34,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PickupItem() override;
-
+	
 };
