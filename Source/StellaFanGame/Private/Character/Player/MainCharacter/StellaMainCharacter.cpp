@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "StellaFanGame.h"
+#include "Interactions/Interfaces/MinigameInterface.h"
 #include "Interactions/Interfaces/PickupInterface.h"
 
 // Sets default values
@@ -57,6 +58,9 @@ AStellaMainCharacter::AStellaMainCharacter()
 	BoxCollision->SetupAttachment(RootComponent);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	Tags.Add("PlayerTag");
+	BoxCollision->ComponentTags.Add("PlayerInteractComponentTag");
 }
 
 void AStellaMainCharacter::BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -174,15 +178,24 @@ void AStellaMainCharacter::Interact()
 	UE_LOG(LogTemp, Log, TEXT("Interact"));
 	TArray<AActor*> OverlappingActors;
 	BoxCollision->GetOverlappingActors(OverlappingActors);
+	TArray<UPrimitiveComponent*> OverlappingComponents;
 
 	for (AActor* Actor : OverlappingActors)
 	{
+		if (Actor->Tags.Contains("MinigameLocationTag"))
+		{
+			IMinigameInterface* Minigame = Cast<IMinigameInterface>(Actor);
+			if (Minigame != nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Minigame interface"));
+				Minigame->MinigameInteract();
+			}
+		}
 		if (Actor->Tags.Contains("PickupTag"))
 		{
 			IPickupInterface* Pickup = Cast<IPickupInterface>(Actor);
 			if (Pickup != nullptr)
 				Pickup->PickupItem();
-				//UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
 		}
 		
 	}
