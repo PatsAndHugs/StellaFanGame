@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interactions/Interfaces/MinigameInterface.h"
 #include "KitchenSinkComponents.generated.h"
 
 class UBoxComponent;
@@ -11,7 +12,7 @@ class UCameraComponent;
 class USpringArmComponent;
 
 UCLASS()
-class STELLAFANGAME_API AKitchenSinkComponents : public AActor
+class STELLAFANGAME_API AKitchenSinkComponents : public AActor, public IMinigameInterface
 {
 	GENERATED_BODY()
 	
@@ -35,8 +36,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	void BoxCollisionOnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void MinigameInteract() override;
 
 };
