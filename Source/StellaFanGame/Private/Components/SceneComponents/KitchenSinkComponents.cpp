@@ -5,6 +5,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/MiniGames/DishWashingMinigame.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -22,7 +23,8 @@ AKitchenSinkComponents::AKitchenSinkComponents()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-
+	Minigame = CreateDefaultSubobject<UDishWashingMinigame>(TEXT("Minigame"));
+	
 	Tags.Add("MinigameLocationTag");
 }
 
@@ -62,12 +64,12 @@ void AKitchenSinkComponents::BoxCollisionOnEndOverlap(UPrimitiveComponent* Overl
 void AKitchenSinkComponents::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AKitchenSinkComponents::MinigameInteract()
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
+	Minigame->ShowArrowPrompts();
 }
 

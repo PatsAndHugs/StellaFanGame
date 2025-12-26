@@ -10,6 +10,7 @@
 class UBoxComponent;
 class UCameraComponent;
 class USpringArmComponent;
+class UDishWashingMinigame;
 
 UCLASS()
 class STELLAFANGAME_API AKitchenSinkComponents : public AActor, public IMinigameInterface
@@ -31,6 +32,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent*  BoxCollision;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interact", meta = (AllowPrivateAccess = "true"))
+	UDishWashingMinigame* Minigame;
 
 protected:
 	// Called when the game starts or when spawned
