@@ -12,9 +12,11 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "InputMappingContext.h"
 #include "StellaFanGame.h"
 #include "Interactions/Interfaces/MinigameInterface.h"
 #include "Interactions/Interfaces/PickupInterface.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AStellaMainCharacter::AStellaMainCharacter()
@@ -104,7 +106,8 @@ void AStellaMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::Interact);
-
+		//DWUpAction
+		EnhancedInputComponent->BindAction(DWUpAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::TestFunc);
 	}
 	else
 	{
@@ -189,6 +192,7 @@ void AStellaMainCharacter::Interact()
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Minigame interface"));
 				Minigame->MinigameInteract();
+				Minigame->ChangeMappingContext();
 			}
 		}
 		if (Actor->Tags.Contains("PickupTag"))
@@ -197,6 +201,10 @@ void AStellaMainCharacter::Interact()
 			if (Pickup != nullptr)
 				Pickup->PickupItem();
 		}
-		
 	}
+}
+
+void AStellaMainCharacter::TestFunc()
+{
+	UE_LOG(LogTemp,Warning,TEXT("TestFunc"));
 }

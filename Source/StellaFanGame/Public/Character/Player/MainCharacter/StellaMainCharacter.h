@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UBoxComponent;
 class UInputAction;
+class UInputMappingContext;
 struct FInputActionValue;
 
 UCLASS(abstract)
@@ -53,7 +54,9 @@ protected:
     UFUNCTION()
     void BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* DWUpAction;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -83,7 +86,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Input")
 	void Interact();
-	
+
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void TestFunc();
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
