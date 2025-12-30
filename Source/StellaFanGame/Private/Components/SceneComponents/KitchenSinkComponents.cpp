@@ -3,6 +3,7 @@
 
 #include "Components/SceneComponents/KitchenSinkComponents.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/MiniGames/DishWashingMinigame.h"
@@ -71,5 +72,23 @@ void AKitchenSinkComponents::MinigameInteract()
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
 	Minigame->ShowArrowPrompts();
+}
+
+void AKitchenSinkComponents::ChangeMappingContext()
+{
+	
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->GetLocalPlayer()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			// Remove the general gameplay context
+			Subsystem->RemoveMappingContext(DefaultMappingContext);
+			
+			// Add the menu-specific context. Give it a higher priority (e.g., 1) to ensure it takes precedence over any remaining base contexts
+			Subsystem->AddMappingContext(DishWashingMappingContext, 1);
+			UE_LOG(LogTemp, Warning, TEXT("Mapping Context Change"));
+		}
+	}
 }
 

@@ -11,6 +11,7 @@ class UBoxComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UDishWashingMinigame;
+class UInputMappingContext;
 
 UCLASS()
 class STELLAFANGAME_API AKitchenSinkComponents : public AActor, public IMinigameInterface
@@ -51,5 +52,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void MinigameInteract() override;
+
+	virtual void ChangeMappingContext() override;
+	
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input", meta=(AllowPrivateAccess="true"))
+	UInputMappingContext* DefaultMappingContext;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input", meta=(AllowPrivateAccess="true"))
+	UInputMappingContext* DishWashingMappingContext;
 
 };

@@ -36,4 +36,5 @@ public:
 	void ShowArrowPrompts();
 
 	int32 DifficultyLevel = 1;
+	
 };
