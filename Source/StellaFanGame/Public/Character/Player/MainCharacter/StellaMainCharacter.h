@@ -54,8 +54,11 @@ protected:
     UFUNCTION()
     void BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	UPROPERTY(EditAnywhere,Category="Input")
+	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
 	UInputAction* DWUpAction;
+
+	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
+	UInputAction* ExitDWMinigameAction;
 	
 public:	
 	// Called every frame
@@ -90,6 +93,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	void TestFunc();
 
+private:
+
+	void ExitDWMinigame();
+	void ReturnCameraViewToPlayer();
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

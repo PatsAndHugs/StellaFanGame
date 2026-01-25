@@ -108,6 +108,8 @@ void AStellaMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::Interact);
 		//DWUpAction
 		EnhancedInputComponent->BindAction(DWUpAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::TestFunc);
+
+		EnhancedInputComponent->BindAction(ExitDWMinigameAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::ExitDWMinigame);
 	}
 	else
 	{
@@ -192,7 +194,7 @@ void AStellaMainCharacter::Interact()
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Minigame interface"));
 				Minigame->MinigameInteract();
-				Minigame->ChangeMappingContext();
+				Minigame->ChangeToNewMappingContext();
 			}
 		}
 		if (Actor->Tags.Contains("PickupTag"))
@@ -207,4 +209,31 @@ void AStellaMainCharacter::Interact()
 void AStellaMainCharacter::TestFunc()
 {
 	UE_LOG(LogTemp,Warning,TEXT("TestFunc"));
+}
+
+void AStellaMainCharacter::ExitDWMinigame()
+{
+	TArray<AActor*> OverlappingActors;
+	BoxCollision->GetOverlappingActors(OverlappingActors);
+	TArray<UPrimitiveComponent*> OverlappingComponents;
+	
+	for (AActor* Actor : OverlappingActors)
+	{
+		if (Actor->Tags.Contains("MinigameLocationTag"))
+		{
+			IMinigameInterface* Minigame = Cast<IMinigameInterface>(Actor);
+			if (Minigame != nullptr)
+			{
+				Minigame->RevertToDefaultMappingContext();
+				ReturnCameraViewToPlayer();
+				UE_LOG(LogTemp, Warning, TEXT("EXIT DW MINIGAME"));
+			}
+		}
+	}
+}
+
+void AStellaMainCharacter::ReturnCameraViewToPlayer()
+{
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
 }
