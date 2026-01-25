@@ -53,9 +53,13 @@ public:
 
 	virtual void MinigameInteract() override;
 
-	virtual void ChangeMappingContext() override;
+	virtual void ChangeToNewMappingContext() override;
+
+	virtual void RevertToDefaultMappingContext() override;
 	
 private:
+
+	void ChangeMappingContext(const UInputMappingContext* NewMappingContext, const UInputMappingContext* OldMappingContext);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input", meta=(AllowPrivateAccess="true"))
 	UInputMappingContext* DefaultMappingContext;
 	

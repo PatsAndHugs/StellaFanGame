@@ -74,21 +74,32 @@ void AKitchenSinkComponents::MinigameInteract()
 	Minigame->ShowArrowPrompts();
 }
 
-void AKitchenSinkComponents::ChangeMappingContext()
+void AKitchenSinkComponents::ChangeToNewMappingContext()
 {
-	
+	ChangeMappingContext(DishWashingMappingContext, DefaultMappingContext);
+}
+
+void AKitchenSinkComponents::RevertToDefaultMappingContext()
+{
+	ChangeMappingContext(DefaultMappingContext, DishWashingMappingContext);
+}
+
+void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* NewMappingContext,
+	const UInputMappingContext* OldMappingContext)
+{
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
 	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->GetLocalPlayer()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			// Remove the general gameplay context
-			Subsystem->RemoveMappingContext(DefaultMappingContext);
+			Subsystem->RemoveMappingContext(OldMappingContext);
 			
 			// Add the menu-specific context. Give it a higher priority (e.g., 1) to ensure it takes precedence over any remaining base contexts
-			Subsystem->AddMappingContext(DishWashingMappingContext, 1);
+			Subsystem->AddMappingContext(NewMappingContext, 1);
 			UE_LOG(LogTemp, Warning, TEXT("Mapping Context Change"));
 		}
 	}
 }
+
 
