@@ -106,8 +106,14 @@ void AStellaMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::Interact);
-		//DWUpAction
-		EnhancedInputComponent->BindAction(DWUpAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::TestFunc);
+		//DWActions
+		EnhancedInputComponent->BindAction(DWUpAction, ETriggerEvent::Started, this, &AStellaMainCharacter::DWUpFunc);
+
+		EnhancedInputComponent->BindAction(DWDownAction, ETriggerEvent::Started, this, &AStellaMainCharacter::DWDownFunc);
+
+		EnhancedInputComponent->BindAction(DWRightAction, ETriggerEvent::Started, this, &AStellaMainCharacter::DWRightFunc);
+
+		EnhancedInputComponent->BindAction(DWLeftAction, ETriggerEvent::Started, this, &AStellaMainCharacter::DWLeftFunc);
 
 		EnhancedInputComponent->BindAction(ExitDWMinigameAction, ETriggerEvent::Triggered, this, &AStellaMainCharacter::ExitDWMinigame);
 	}
@@ -189,6 +195,7 @@ void AStellaMainCharacter::Interact()
 	{
 		if (Actor->Tags.Contains("MinigameLocationTag"))
 		{
+			CurrentInteractedActor = Actor;
 			IMinigameInterface* Minigame = Cast<IMinigameInterface>(Actor);
 			if (Minigame != nullptr)
 			{
@@ -209,6 +216,50 @@ void AStellaMainCharacter::Interact()
 void AStellaMainCharacter::TestFunc()
 {
 	UE_LOG(LogTemp,Warning,TEXT("TestFunc"));
+}
+
+void AStellaMainCharacter::DWUpFunc()
+{
+	if (CurrentInteractedActor != nullptr)
+	{
+		if (IMinigameInterface* Minigame = Cast<IMinigameInterface>(CurrentInteractedActor))
+		{
+			Minigame->PlayerPressedUp();
+		}
+	}
+}
+
+void AStellaMainCharacter::DWDownFunc()
+{
+	if (CurrentInteractedActor != nullptr)
+	{
+		if (IMinigameInterface* Minigame = Cast<IMinigameInterface>(CurrentInteractedActor))
+		{
+			Minigame->PlayerPressedDown();
+		}
+	}
+}
+
+void AStellaMainCharacter::DWLeftFunc()
+{
+	if (CurrentInteractedActor != nullptr)
+	{
+		if (IMinigameInterface* Minigame = Cast<IMinigameInterface>(CurrentInteractedActor))
+		{
+			Minigame->PlayerPressedLeft();
+		}
+	}
+}
+
+void AStellaMainCharacter::DWRightFunc()
+{
+	if (CurrentInteractedActor != nullptr)
+	{
+		if (IMinigameInterface* Minigame = Cast<IMinigameInterface>(CurrentInteractedActor))
+		{
+			Minigame->PlayerPressedRight();
+		}
+	}
 }
 
 void AStellaMainCharacter::ExitDWMinigame()

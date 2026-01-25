@@ -58,6 +58,15 @@ protected:
 	UInputAction* DWUpAction;
 
 	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
+	UInputAction* DWDownAction;
+	
+	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
+	UInputAction* DWLeftAction;
+	
+	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
+	UInputAction* DWRightAction;
+
+	UPROPERTY(EditAnywhere,Category="DishWashingMinigameInput")
 	UInputAction* ExitDWMinigameAction;
 	
 public:	
@@ -93,10 +102,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	void TestFunc();
 
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void DWUpFunc();
+
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void DWDownFunc();
+
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void DWLeftFunc();
+
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void DWRightFunc();
+
 private:
 
 	void ExitDWMinigame();
 	void ReturnCameraViewToPlayer();
+	AActor* CurrentInteractedActor;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
