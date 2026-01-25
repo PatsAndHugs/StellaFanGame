@@ -24,5 +24,6 @@ class STELLAFANGAME_API IMinigameInterface
 public:
 
 	virtual void MinigameInteract() = 0;
-	virtual void ChangeMappingContext() = 0;
+	virtual void ChangeToNewMappingContext() = 0;
+	virtual void RevertToDefaultMappingContext() = 0;
 };
