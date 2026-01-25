@@ -26,4 +26,9 @@ public:
 	virtual void MinigameInteract() = 0;
 	virtual void ChangeToNewMappingContext() = 0;
 	virtual void RevertToDefaultMappingContext() = 0;
+	virtual void PlayerPressedUp() = 0;
+	virtual void PlayerPressedDown() = 0;
+	virtual void PlayerPressedLeft() = 0;
+	virtual void PlayerPressedRight() = 0;
+
 };
