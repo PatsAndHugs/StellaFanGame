@@ -56,6 +56,15 @@ public:
 	virtual void ChangeToNewMappingContext() override;
 
 	virtual void RevertToDefaultMappingContext() override;
+
+	virtual void PlayerPressedUp() override;
+
+	virtual void PlayerPressedDown() override;
+
+	virtual void PlayerPressedLeft() override;
+
+	virtual void PlayerPressedRight() override;
+
 	
 private:
 

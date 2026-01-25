@@ -84,8 +84,29 @@ void AKitchenSinkComponents::RevertToDefaultMappingContext()
 	ChangeMappingContext(DefaultMappingContext, DishWashingMappingContext);
 }
 
+void AKitchenSinkComponents::PlayerPressedUp()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedUp"));
+}
+
+void AKitchenSinkComponents::PlayerPressedDown()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedDown"));
+}
+
+void AKitchenSinkComponents::PlayerPressedLeft()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedLeft"));
+}
+
+void AKitchenSinkComponents::PlayerPressedRight()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedRight"));
+
+}
+
 void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* NewMappingContext,
-	const UInputMappingContext* OldMappingContext)
+                                                  const UInputMappingContext* OldMappingContext)
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
 	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->GetLocalPlayer()))
