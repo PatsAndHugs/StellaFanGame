@@ -36,5 +36,21 @@ public:
 	void ShowArrowPrompts();
 
 	int32 DifficultyLevel = 1;
+
+	void AddUpInput();
+	void AddDownInput();
+	void AddLeftInput();
+	void AddRightInput();
 	
+	UFUNCTION(BlueprintPure)
+	float GetPlayerScore() const {return PlayerScore;}
+
+private:
+
+	int32 NumberOfPrompts = DifficultyLevel + 4;
+	TArray<FString> DisplayArrowPromptsArr;
+	TArray<FString> UserInputArr;
+	float PlayerScore = 0.f;
+	bool GetNewPrompts();
+
 };
