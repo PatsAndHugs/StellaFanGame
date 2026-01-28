@@ -45,12 +45,21 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetPlayerScore() const {return PlayerScore;}
 
+	UFUNCTION(BlueprintPure)
+	FString GetArrowPrompts() const {return ArrowPrompts; }
+
+	UFUNCTION(BlueprintPure)
+	TArray<FString> GetArrowPromptsArr() const {return DisplayArrowPromptsArr;}
+	
+	void ClearPlayerScore() {PlayerScore = 0;}
+	
 private:
 
-	int32 NumberOfPrompts = DifficultyLevel + 4;
+	int32 NumberOfPrompts = DifficultyLevel + 3;
 	TArray<FString> DisplayArrowPromptsArr;
 	TArray<FString> UserInputArr;
 	float PlayerScore = 0.f;
 	bool GetNewPrompts();
+	FString ArrowPrompts;
 
 };

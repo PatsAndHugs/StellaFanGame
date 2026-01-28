@@ -36,9 +36,10 @@ void UDishWashingMinigame::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UDishWashingMinigame::ShowArrowPrompts()
 {
 	TArray<EArrowPrompts> ArrowPromptsList = {EArrowPrompts::Up, EArrowPrompts::Down, EArrowPrompts::Left, EArrowPrompts::Right};
-	FString ArrowPrompts;
+	
 	//clear
 	DisplayArrowPromptsArr.Empty();
+	ArrowPrompts.Empty();
 	//add temp number to difficulty to add more prompts 
 	for (int i = 0; i < NumberOfPrompts; i++)
 	{
