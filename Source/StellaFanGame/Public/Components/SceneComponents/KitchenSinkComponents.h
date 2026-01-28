@@ -65,6 +65,8 @@ public:
 
 	virtual void PlayerPressedRight() override;
 
+	virtual void ResetPlayerScore() override;
+
 	
 private:
 

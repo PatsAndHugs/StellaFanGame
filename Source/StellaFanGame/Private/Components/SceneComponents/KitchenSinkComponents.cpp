@@ -115,6 +115,11 @@ void AKitchenSinkComponents::PlayerPressedRight()
 
 }
 
+void AKitchenSinkComponents::ResetPlayerScore()
+{
+	Minigame->ClearPlayerScore();
+}
+
 void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* NewMappingContext,
                                                   const UInputMappingContext* OldMappingContext)
 {
