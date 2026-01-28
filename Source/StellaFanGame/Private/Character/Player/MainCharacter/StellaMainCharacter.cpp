@@ -277,6 +277,7 @@ void AStellaMainCharacter::ExitDWMinigame()
 			{
 				Minigame->RevertToDefaultMappingContext();
 				ReturnCameraViewToPlayer();
+				Minigame->ResetPlayerScore();
 				UE_LOG(LogTemp, Warning, TEXT("EXIT DW MINIGAME"));
 			}
 		}
