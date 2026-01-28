@@ -75,4 +75,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input", meta=(AllowPrivateAccess="true"))
 	UInputMappingContext* DishWashingMappingContext;
 
+	UPROPERTY(EditAnywhere, Category="HUD")
+	TSubclassOf<class UUserWidget> DishWashingMinigameWidget;
+	void ShowMinigameWidget();
+	void RemoveMinigameWidget();
+	UUserWidget* MinigameWidget;
+
+	APlayerController* PlayerController;
+
 };

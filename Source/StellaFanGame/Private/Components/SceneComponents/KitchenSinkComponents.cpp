@@ -9,6 +9,7 @@
 #include "Components/MiniGames/DishWashingMinigame.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 AKitchenSinkComponents::AKitchenSinkComponents()
@@ -35,6 +36,9 @@ void AKitchenSinkComponents::BeginPlay()
 	Super::BeginPlay();
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AKitchenSinkComponents::BoxCollisionOnBeginOverlap);
 	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AKitchenSinkComponents::BoxCollisionOnEndOverlap);
+	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+	MinigameWidget = CreateWidget(PlayerController, DishWashingMinigameWidget);
+
 }
 
 void AKitchenSinkComponents::BoxCollisionOnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -69,9 +73,10 @@ void AKitchenSinkComponents::Tick(float DeltaTime)
 
 void AKitchenSinkComponents::MinigameInteract()
 {
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
 	Minigame->ShowArrowPrompts();
+	ShowMinigameWidget();
 }
 
 void AKitchenSinkComponents::ChangeToNewMappingContext()
@@ -82,33 +87,38 @@ void AKitchenSinkComponents::ChangeToNewMappingContext()
 void AKitchenSinkComponents::RevertToDefaultMappingContext()
 {
 	ChangeMappingContext(DefaultMappingContext, DishWashingMappingContext);
+	RemoveMinigameWidget();
 }
 
 void AKitchenSinkComponents::PlayerPressedUp()
 {
 	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedUp"));
+	Minigame->AddUpInput();
 }
 
 void AKitchenSinkComponents::PlayerPressedDown()
 {
 	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedDown"));
+	Minigame->AddDownInput();
 }
 
 void AKitchenSinkComponents::PlayerPressedLeft()
 {
 	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedLeft"));
+	Minigame->AddLeftInput();
 }
 
 void AKitchenSinkComponents::PlayerPressedRight()
 {
 	UE_LOG(LogTemp, Warning, TEXT("PlayerPressedRight"));
+	Minigame->AddRightInput();
 
 }
 
 void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* NewMappingContext,
                                                   const UInputMappingContext* OldMappingContext)
 {
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
+	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
 	if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->GetLocalPlayer()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
@@ -120,6 +130,22 @@ void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* Ne
 			Subsystem->AddMappingContext(NewMappingContext, 1);
 			UE_LOG(LogTemp, Warning, TEXT("Mapping Context Change"));
 		}
+	}
+}
+
+void AKitchenSinkComponents::ShowMinigameWidget()
+{
+	if (MinigameWidget != nullptr)
+	{
+		MinigameWidget->AddToViewport();
+	}
+}
+
+void AKitchenSinkComponents::RemoveMinigameWidget()
+{
+	if (MinigameWidget != nullptr)
+	{
+		MinigameWidget->RemoveFromParent();
 	}
 }
 
