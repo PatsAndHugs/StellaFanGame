@@ -35,6 +35,7 @@ void UDishWashingMinigame::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UDishWashingMinigame::ShowArrowPrompts()
 {
+	InitializeIsCurrentInputCorrectArr();
 	TArray<EArrowPrompts> ArrowPromptsList = {EArrowPrompts::Up, EArrowPrompts::Down, EArrowPrompts::Left, EArrowPrompts::Right};
 	
 	//clear
@@ -57,56 +58,101 @@ void UDishWashingMinigame::ShowArrowPrompts()
 void UDishWashingMinigame::AddUpInput()
 {
 	UserInputArr.Add(TEXT("↑"));
-	if (UserInputArr.Num() == NumberOfPrompts)
+	
+	UpdateIsCurrentInputCorrectArr();
+	UE_LOG(LogTemp, Display, TEXT("Current index %d"), CurrentInputIndex);
+	if (CurrentInputIndex == NumberOfPrompts)
+	{
 		GetNewPrompts();
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GetNewPrompt"));
+	}
 }
 
 void UDishWashingMinigame::AddDownInput()
 {
 	UserInputArr.Add(TEXT("↓"));
-	if (UserInputArr.Num() == NumberOfPrompts)
+	
+	UpdateIsCurrentInputCorrectArr();
+	UE_LOG(LogTemp, Display, TEXT("Current index %d"), CurrentInputIndex);
+	if (CurrentInputIndex == NumberOfPrompts)
+	{
 		GetNewPrompts();
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GetNewPrompt"));
+	}
 }
 
 void UDishWashingMinigame::AddLeftInput()
 {
 	UserInputArr.Add(TEXT("←"));
-	if (UserInputArr.Num() == NumberOfPrompts)
+	
+	UpdateIsCurrentInputCorrectArr();
+	UE_LOG(LogTemp, Display, TEXT("Current index %d"), CurrentInputIndex);
+	if (CurrentInputIndex == NumberOfPrompts)
+	{
 		GetNewPrompts();
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GetNewPrompt"));
+	}
 }
 
 void UDishWashingMinigame::AddRightInput()
 {
 	UserInputArr.Add(TEXT("→"));
-	if (UserInputArr.Num() == NumberOfPrompts)
+	
+	UpdateIsCurrentInputCorrectArr();
+	UE_LOG(LogTemp, Display, TEXT("Current index %d"), CurrentInputIndex);
+	if (CurrentInputIndex == NumberOfPrompts)
+	{
 		GetNewPrompts();
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GetNewPrompt"));
+	}
 }
 
-bool UDishWashingMinigame::GetNewPrompts()
+bool UDishWashingMinigame::CheckCurrentInput()
 {
-	if (UserInputArr.IsEmpty())
-		return false;
-	
-	if (UserInputArr.Num() == NumberOfPrompts)
+	if (CurrentInputIndex < NumberOfPrompts)
 	{
-		bool bIsAllInputCorrect = true;
-		//Check if each input is equal to the currently shown prompts
-		for (int i = 0; i < NumberOfPrompts; i++)
-		{
-			if (UserInputArr[i] != DisplayArrowPromptsArr[i])
-				bIsAllInputCorrect = false;
-		}
-		//clear UserInput Arr
-		UserInputArr.Empty();
-		UE_LOG(LogTemp, Warning, TEXT("GetNewPrompts Result: %s"),bIsAllInputCorrect ? TEXT("true") : TEXT("false"));
-		ShowArrowPrompts();
-		
-		if (bIsAllInputCorrect)
-			PlayerScore += 100.f;
-		
-		return bIsAllInputCorrect;
+		if (UserInputArr[CurrentInputIndex] == DisplayArrowPromptsArr[CurrentInputIndex])
+        {
+        	CurrentInputIndex = CurrentInputIndex < NumberOfPrompts ? CurrentInputIndex + 1 : 0;
+        	bIsCurrentInputCorrect = true;
+        	return true;
+        }
 	}
-
+	CurrentInputIndex = 0;
+	bIsCurrentInputCorrect = false;
 	return false;
+}
+
+void UDishWashingMinigame::UpdateIsCurrentInputCorrectArr()
+{
+	if (CheckCurrentInput())
+		IsCurrentInputCorrectArr[CurrentInputIndex - 1] = true;
+	else
+	{
+		UserInputArr.Empty();
+		InitializeIsCurrentInputCorrectArr();
+	}
+}
+
+void UDishWashingMinigame::InitializeIsCurrentInputCorrectArr()
+{
+	IsCurrentInputCorrectArr.Empty();
+	for(int i = 0; i < NumberOfPrompts; i++)
+		IsCurrentInputCorrectArr.Add(false);
+}
+
+void UDishWashingMinigame::GetNewPrompts()
+{
+	if (IsCurrentInputCorrectArr.Num() < NumberOfPrompts)
+		return;
+	
+	UserInputArr.Empty();
+	CurrentInputIndex = 0;
+	ShowArrowPrompts();
+	PlayerScore += 100.f;
 }
 

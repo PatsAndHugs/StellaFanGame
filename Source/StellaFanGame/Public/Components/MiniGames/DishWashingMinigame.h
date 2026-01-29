@@ -52,14 +52,23 @@ public:
 	TArray<FString> GetArrowPromptsArr() const {return DisplayArrowPromptsArr;}
 	
 	void ClearPlayerScore() {PlayerScore = 0;}
+
+	UFUNCTION(BlueprintPure)
+	TArray<bool> GetIsCurrentInputCorrect() const {return IsCurrentInputCorrectArr;}
 	
 private:
 
 	int32 NumberOfPrompts = DifficultyLevel + 3;
 	TArray<FString> DisplayArrowPromptsArr;
 	TArray<FString> UserInputArr;
+	TArray<bool> IsCurrentInputCorrectArr;
 	float PlayerScore = 0.f;
-	bool GetNewPrompts();
+	void GetNewPrompts();
 	FString ArrowPrompts;
-
+	int32 CurrentInputIndex = 0;
+	bool CheckCurrentInput();
+	bool bIsCurrentInputCorrect = false;
+	//if check current input is true then add it to the end of the array otherwise empty the array
+	void UpdateIsCurrentInputCorrectArr();
+	void InitializeIsCurrentInputCorrectArr();
 };
