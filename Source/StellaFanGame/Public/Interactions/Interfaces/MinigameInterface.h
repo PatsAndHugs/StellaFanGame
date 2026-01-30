@@ -31,5 +31,6 @@ public:
 	virtual void PlayerPressedLeft() = 0;
 	virtual void PlayerPressedRight() = 0;
 	virtual void ResetPlayerScore() = 0;
+	virtual void ExitMinigame() = 0;
 
 };
