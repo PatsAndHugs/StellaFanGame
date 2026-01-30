@@ -67,6 +67,11 @@ public:
 
 	virtual void ResetPlayerScore() override;
 
+	UFUNCTION(BlueprintCallable)
+	void StartEasyGame();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ExitMinigame() override;
 	
 private:
 

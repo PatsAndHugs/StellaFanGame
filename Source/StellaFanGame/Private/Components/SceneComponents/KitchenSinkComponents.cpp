@@ -75,8 +75,8 @@ void AKitchenSinkComponents::MinigameInteract()
 {
 	PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
-	Minigame->ShowArrowPrompts();
-	ShowMinigameWidget();
+	//Minigame->ShowArrowPrompts();
+	//ShowMinigameWidget();
 }
 
 void AKitchenSinkComponents::ChangeToNewMappingContext()
@@ -87,7 +87,7 @@ void AKitchenSinkComponents::ChangeToNewMappingContext()
 void AKitchenSinkComponents::RevertToDefaultMappingContext()
 {
 	ChangeMappingContext(DefaultMappingContext, DishWashingMappingContext);
-	RemoveMinigameWidget();
+	//RemoveMinigameWidget();
 }
 
 void AKitchenSinkComponents::PlayerPressedUp()
@@ -118,6 +118,17 @@ void AKitchenSinkComponents::PlayerPressedRight()
 void AKitchenSinkComponents::ResetPlayerScore()
 {
 	Minigame->ClearPlayerScore();
+}
+
+void AKitchenSinkComponents::StartEasyGame()
+{
+	Minigame->ShowArrowPrompts();
+}
+
+void AKitchenSinkComponents::ExitMinigame()
+{
+	RevertToDefaultMappingContext();
+	ResetPlayerScore();
 }
 
 void AKitchenSinkComponents::ChangeMappingContext(const UInputMappingContext* NewMappingContext,
