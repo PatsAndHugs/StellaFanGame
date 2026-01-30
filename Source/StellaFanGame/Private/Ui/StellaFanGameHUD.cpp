@@ -18,7 +18,7 @@ void AStellaFanGameHUD::BeginPlay()
 	PlayerController = Cast<APlayerController>(GetOwner());
 }
 
-void AStellaFanGameHUD::InitializeHUD(TSubclassOf<UUserWidget> MenuClass, UUserWidget* MenuBar,
+void AStellaFanGameHUD::InitializeHUD(TSubclassOf<UUserWidget> MenuClass, UUserWidget*& MenuBar,
                                       bool bShouldAddToViewport)
 {
 	if (IsValid(MenuClass))
@@ -26,12 +26,12 @@ void AStellaFanGameHUD::InitializeHUD(TSubclassOf<UUserWidget> MenuClass, UUserW
 		MenuBar = CreateWidget<UUserWidget>(PlayerController, MenuClass);
 		if (bShouldAddToViewport == true)
 			MenuBar->AddToViewport();
-	}
+	}	
 }
 
-void AStellaFanGameHUD::RemoveHUDFromViewport(UUserWidget* MenuBar)
+void AStellaFanGameHUD::RemoveHUDFromViewport(UUserWidget*& MenuBar)
 {
-	if (MenuBar != nullptr)
+	if (IsValid(MenuBar))
 		MenuBar->RemoveFromParent();
 }
 
@@ -42,4 +42,33 @@ void AStellaFanGameHUD::SetDishWashingMinigameScore(float Score)
 		FString ScoreStr = FString::SanitizeFloat(Score);
 		DWMinigameScoreTextBox->SetText(FText::FromString(ScoreStr));
 	}
+}
+
+void AStellaFanGameHUD::ShowDishWashingMainHUD()
+{
+	InitializeHUD(DishwashingMainHUDClass, DishwashingMainHUD, true);
+}
+
+void AStellaFanGameHUD::HideDishWashingMainHUD()
+{
+	//if (IsValid(DishwashingMinigameHUD))
+	//DishwashingMinigameHUD->RemoveFromParent();
+	RemoveHUDFromViewport(DishwashingMainHUD);
+}
+
+void AStellaFanGameHUD::ShowDishWashingMinigameHUD()
+{
+	InitializeHUD(DishwashingMinigameHUDClass, DishwashingMinigameHUD, true);
+	RemoveHUDFromViewport(DishwashingMainHUD);
+}
+
+void AStellaFanGameHUD::HideDishWashingMinigameHUD()
+{
+	RemoveHUDFromViewport(DishwashingMinigameHUD);
+}
+
+void AStellaFanGameHUD::RemoveAllDishWashingMinigameHUD()
+{
+	HideDishWashingMinigameHUD();
+	HideDishWashingMainHUD();
 }

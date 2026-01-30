@@ -24,18 +24,33 @@ protected:
 
 private:
 
-	void InitializeHUD(TSubclassOf<UUserWidget> MenuClass, UUserWidget* MenuBar, bool bShouldAddToViewport);
-	void RemoveHUDFromViewport(UUserWidget* MenuBar);
+	void InitializeHUD(TSubclassOf<UUserWidget> MenuClass, UUserWidget*& MenuBar, bool bShouldAddToViewport);
+	void RemoveHUDFromViewport(UUserWidget*& MenuBar);
 	APlayerController* PlayerController;
 
 //DishWashing minigame
 protected:
 	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> DishwashingMainHUDClass;
+
+	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> DishwashingMinigameHUDClass;
+
+	UUserWidget* DishwashingMainHUD;
+	UUserWidget* DishwashingMinigameHUD;
 
 public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* DWMinigameScoreTextBox;
 	
 	void SetDishWashingMinigameScore(float Score);
+	void ShowDishWashingMainHUD();
+	void HideDishWashingMainHUD();
+	
+	UFUNCTION(BlueprintCallable)
+	void ShowDishWashingMinigameHUD();
+	void HideDishWashingMinigameHUD();
+	
+	UFUNCTION(BlueprintCallable)
+	void RemoveAllDishWashingMinigameHUD();
 };
