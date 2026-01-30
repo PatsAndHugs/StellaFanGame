@@ -17,6 +17,7 @@
 #include "Interactions/Interfaces/MinigameInterface.h"
 #include "Interactions/Interfaces/PickupInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Ui/StellaFanGameHUD.h"
 
 // Sets default values
 AStellaMainCharacter::AStellaMainCharacter()
@@ -75,6 +76,8 @@ void AStellaMainCharacter::BoxCollisionOnBeginOverlap(UPrimitiveComponent* Overl
 void AStellaMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	InitializeHUD();
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AStellaMainCharacter::BoxCollisionOnBeginOverlap);
 }
 
@@ -202,6 +205,11 @@ void AStellaMainCharacter::Interact()
 				UE_LOG(LogTemp, Warning, TEXT("Minigame interface"));
 				Minigame->MinigameInteract();
 				Minigame->ChangeToNewMappingContext();
+				if (IsValid(MainHUD))
+				{
+					EnableMouseCursor();
+					MainHUD->ShowDishWashingMainHUD();
+				}
 			}
 		}
 		if (Actor->Tags.Contains("PickupTag"))
@@ -275,9 +283,14 @@ void AStellaMainCharacter::ExitDWMinigame()
 			IMinigameInterface* Minigame = Cast<IMinigameInterface>(Actor);
 			if (Minigame != nullptr)
 			{
-				Minigame->RevertToDefaultMappingContext();
+				Minigame->ExitMinigame();
 				ReturnCameraViewToPlayer();
-				Minigame->ResetPlayerScore();
+				if (IsValid(MainHUD))
+				{
+					//RemoveDishWashingMainHUD
+					MainHUD->RemoveAllDishWashingMinigameHUD();
+					DisableMouseCursor();
+				}
 				UE_LOG(LogTemp, Warning, TEXT("EXIT DW MINIGAME"));
 			}
 		}
@@ -286,6 +299,29 @@ void AStellaMainCharacter::ExitDWMinigame()
 
 void AStellaMainCharacter::ReturnCameraViewToPlayer()
 {
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	PlayerController->SetViewTargetWithBlend(this, 0.5f,EViewTargetBlendFunction::VTBlend_Linear,true);
+}
+
+void AStellaMainCharacter::InitializeHUD()
+{
+	MainHUD = Cast<AStellaFanGameHUD>(PlayerController->GetHUD());
+}
+
+void AStellaMainCharacter::EnableMouseCursor()
+{
+	PlayerController->bShowMouseCursor = true;
+	PlayerController->bEnableClickEvents = true;
+	PlayerController->bEnableMouseOverEvents = true;
+	FInputModeGameAndUI InputModeOptions;
+	InputModeOptions.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputModeOptions);
+}
+
+void AStellaMainCharacter::DisableMouseCursor()
+{
+	PlayerController->bShowMouseCursor = false;
+	PlayerController->bEnableClickEvents = false;
+	PlayerController->bEnableMouseOverEvents = false;
+	FInputModeGameOnly InputModeOptions;
+	PlayerController->SetInputMode(InputModeOptions);
 }

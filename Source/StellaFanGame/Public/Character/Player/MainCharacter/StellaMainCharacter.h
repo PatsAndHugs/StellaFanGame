@@ -12,6 +12,8 @@ class UCameraComponent;
 class UBoxComponent;
 class UInputAction;
 class UInputMappingContext;
+class AStellaFanGameHUD;
+
 struct FInputActionValue;
 
 UCLASS(abstract)
@@ -81,6 +83,10 @@ protected:
 	void Move(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
+
+private:
+
+	APlayerController* PlayerController;
 	
 public:
 
@@ -119,7 +125,14 @@ private:
 	void ExitDWMinigame();
 	void ReturnCameraViewToPlayer();
 	AActor* CurrentInteractedActor;
+	AStellaFanGameHUD* MainHUD;
+	void InitializeHUD();
+	void EnableMouseCursor();
+	
 public:
+	UFUNCTION(BlueprintCallable)
+	void DisableMouseCursor();
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
