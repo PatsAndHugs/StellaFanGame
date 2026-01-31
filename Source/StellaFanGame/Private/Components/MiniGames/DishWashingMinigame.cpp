@@ -111,6 +111,17 @@ void UDishWashingMinigame::AddRightInput()
 	}
 }
 
+void UDishWashingMinigame::SetDifficultyLevel(int32 NewVal)
+{
+	DifficultyLevel = NewVal;
+	if (NewVal == 1)
+		NumberOfPrompts = DifficultyLevel + 3;
+	else if (NewVal == 2)
+		NumberOfPrompts = DifficultyLevel + 4;
+	else if (NewVal == 3)
+		NumberOfPrompts = DifficultyLevel + 5;
+}
+
 bool UDishWashingMinigame::CheckCurrentInput()
 {
 	if (CurrentInputIndex < NumberOfPrompts)

@@ -34,9 +34,7 @@ public:
 
 	UFUNCTION()
 	void ShowArrowPrompts();
-
-	int32 DifficultyLevel = 1;
-
+	
 	void AddUpInput();
 	void AddDownInput();
 	void AddLeftInput();
@@ -55,9 +53,16 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	TArray<bool> GetIsCurrentInputCorrect() const {return IsCurrentInputCorrectArr;}
+
+	//Sets Difficulty level and updates number of prompts to be shown based on difficulty level
+	UFUNCTION(BlueprintCallable)
+	void SetDifficultyLevel(int32 NewVal);
+	UFUNCTION(BlueprintCallable)
+	int32 GetDifficultyLevel()const{ return DifficultyLevel;}
 	
 private:
 
+	int32 DifficultyLevel = 1;
 	int32 NumberOfPrompts = DifficultyLevel + 3;
 	TArray<FString> DisplayArrowPromptsArr;
 	TArray<FString> UserInputArr;
