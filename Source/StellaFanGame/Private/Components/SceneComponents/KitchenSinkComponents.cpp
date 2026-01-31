@@ -125,6 +125,16 @@ void AKitchenSinkComponents::StartEasyGame()
 	Minigame->ShowArrowPrompts();
 }
 
+void AKitchenSinkComponents::SetMinigameDifficultyLevel(int32 DifficultyLevel)
+{
+	Minigame->SetDifficultyLevel(DifficultyLevel);
+}
+
+int32 AKitchenSinkComponents::GetDifficultyLevel()
+{
+	return Minigame->GetDifficultyLevel();
+}
+
 void AKitchenSinkComponents::ExitMinigame()
 {
 	RevertToDefaultMappingContext();

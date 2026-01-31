@@ -71,6 +71,12 @@ public:
 	void StartEasyGame();
 
 	UFUNCTION(BlueprintCallable)
+	void SetMinigameDifficultyLevel(int32 DifficultyLevel);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetDifficultyLevel();
+
+	UFUNCTION(BlueprintCallable)
 	virtual void ExitMinigame() override;
 	
 private:
